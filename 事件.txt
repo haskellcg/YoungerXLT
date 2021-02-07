@@ -1,0 +1,129 @@
+事件1
+		注册后服务器的回复
+		内容：用户ID
+		格式字符串: Server#1#User_ID
+事件2
+		登录中服务器的回复
+		内容：成功与否(1/0)
+		格式字符串：Server#3#1(0)
+事件3
+		好友登陆提示
+		内容：好友登陆
+		格式字符串：Server#4#User_ID
+事件4
+		获得所属群组的信息
+		内容：所有群租的信息
+		格式字符串：Server#7#Group_ID#Group_Name#Group_CreatorID#Group_CreateDate#Group_Logo#..............(重复小组信息)
+事件5
+		获得所有好友信息
+		内容：所有好友信息
+		格式字符串：Server#9#User_ID#User_Name#User_Password#User_Sex#User_Age#User_Address#User_HeadPic#User_CreateDate#User_Email#...........(重复个人信息)
+事件6
+		获得所有在线好友
+		内容：所有好友信息
+		格式字符串：Server#11#User_ID#User_Name#User_Password#User_Sex#User_Age#User_Address#User_HeadPic#User_CreateDate#User_Email#...........(重复个人信息)
+事件7
+		获得的所有收到好友请求
+		内容：所有请求
+		格式字符串：Server#13#Relat_ID#Relat_User1#Relat_User2#Relat_Confirm#Relat_CreateDate#........(重复好友关系信息)
+事件8
+		获得所有发出的好有请求
+		内容：所有请求
+		格式字符串：Server#15#Relat_ID#Relat_User1#Relat_User2#Relat_Confirm#Relat_CreateDate#........(重复好友关系信息)
+事件9
+		获得所有所有离线消息
+		内容：所有离线消息
+		格式字符串：Server#17#Msg_ID#Msg_User1#Msg_User2#Msg_Content#Msg_SendDate#...........(重复消息信息)
+事件10
+		获得好友IP
+		内容：好友IP
+		格式字符串：Server#19#User_IPAddress
+事件11
+		发送好友请求服务器回复
+		内容：关系ID
+		格式字符串：Server#21#Relat_ID
+事件12
+		收到好友请求的提示
+		内容：收到者，发出者
+		格式字符串：Server#61#User1#User2
+事件13
+		好友请求被拒绝的提示
+		内容：收到者，发出者
+		格式字符串： Server#25#User1#User2#Failed
+事件14
+		好有请求被接收
+		内容：收到者，发出者
+		格式字符串： Server#23#User1#User2#Successed
+事件15
+		创建群租的服务器回复
+		内容：群组ID
+		格式字符串：Server#29#Group_ID
+事件16
+		发送离线消息的服务器回复
+		内容：离线消息ID
+		格式字符串：Server#50#Msg_ID
+事件17
+		加入群租的服务器回复
+		内容：群组关系的ID
+		格式字符串：Server#31#Entity_ID
+事件18
+		加入群租的对管理员的提示
+		内容：用户ID、群组ID
+		格式字符串：Server#62#UserID#GroupID
+事件19
+		获得所有加入群租的请求
+		内容：所有群组加入请求
+		格式字符串：Server#33#Entity_ID#Entity_GroupID#Entity_MemID#Entity_Confirm#Entity_CreateDate#........(重复组内关系信息)
+事件20
+		同意加入群组的提示
+		内容：用户ID、群组ID
+		格式字符串：Server#35#User_ID#Group_ID#Successed
+事件21
+		拒绝加入群租的提示
+		内容：用户ID，群组ID
+		格式字符串：Server#37#User_ID#Group_ID#Failed
+事件22
+		获得用户信息的服务器回复
+		内容：用户信息
+		格式字符串：Server#40#User_ID#User_Name#User_Password#User_Sex#User_Age#User_Address#User_HeadPic#User_CreateDate#User_Email
+事件23
+		获得群租信息的服务器回复
+		内容：群租信息
+		格式字符串： Server#42#Group_ID#Group_Name#Group_Creator#Group_CreateDate#Group_Logo
+事件24
+		发送文件的提示
+		内容：接收者，发出者，文件名，文件大小
+		格式字符串：Server#52#User1#User2#FileName#FileContent
+事件25
+		发送群组消息的提示
+		内容：发出者，群组ID，内容
+		格式字符串：Server#46#User_ID#Group_ID#Content
+事件26
+		获得群组成员的服务器回复
+		内容：成员信息
+		格式字符串： Server#48#User_ID#User_Name#User_Password#User_Sex#User_Age#User_Address#User_HeadPic#User_CreateDate#User_Email#...........(重复个人信息)
+事件27
+		聊天消息
+		内容：消息内容
+		格式字符串：User_ID#OpType#Msg
+事件28
+		查找用户信息
+		内容：用户信息
+		格式字符串：Server#54#User_ID#User_Name#User_Password#User_Sex#User_Age#User_Address#User_HeadPic#User_CreateDate#User_Email#...........(重复个人信息)
+事件29
+		查找群租信息
+		内容：群组信息
+		格式字符串：Server#56#Group_ID#Group_Name#Group_Creator#Group_CreateDate#Group_Logo
+事件30
+		判断是否为好友
+		内容：是否(1/0)
+		格式字符串：Server#58#1(0)
+事件31
+		判断是否为组员
+		内容：是否(1/0)
+		格式字符串：Server#60#1(0)
+事件32
+		用户注销的提示
+		内容：用户ID
+		格式字符串：Server#64#UserID
+		

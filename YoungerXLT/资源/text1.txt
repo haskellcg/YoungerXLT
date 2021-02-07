@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+namespace TCPServerUsingTcpListener
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IPAddress ipAddress = IPAddress.Any;
+            TcpListener tcpListener = new TcpListener(ipAddress, 13000);
+            tcpListener.Start();
+            while (true)
+            {
+                TcpClient tcpClient = tcpListener.AcceptTcpClient();
+                MyClient newClient = new MyClient(tcpClient);
+                Thread t = new Thread(new ThreadStart(newClient.communicate));
+                t.Start();
+            }
+        }
+    }
+}
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net.Sockets;
+using System.IO;
+using System.Threading;
+
+namespace TCPServerUsingTcpListener
+{
+    class MyClient
+    {
+        TcpClient m_tcpClient;
+
+        public MyClient(TcpClient tc)
+        {
+            m_tcpClient = tc;
+        }
+
+        public void communicate()
+        {
+            NetworkStream ns = m_tcpClient.GetStream();
+            int recv;
+            string mess;
+            while (true)
+            {
+                byte[] bytes = new byte[1024];
+                try
+                {
+                    if ((recv = ns.Read(bytes, 0, 1024)) == 0)
+                    {
+                        Console.WriteLine("disconnected");
+                        break;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("missing");
+                    break;
+                }
+                mess = System.Text.Encoding.ASCII.GetString(bytes, 0, recv);
+                Console.WriteLine(m_tcpClient.Client.AddressFamily.ToString() + "::" + mess);
+                bytes = System.Text.Encoding.ASCII.GetBytes(mess.ToUpper());
+                try
+                {
+                    ns.Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    Console.WriteLine("missing");
+                    break;
+                }
+            }
+            ns.Close();
+            m_tcpClient.Close();
+        }
+    }
+}
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
+
+namespace TCPClientUsingTcpClient
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TcpClient tcpClient = new TcpClient();
+            tcpClient.Connect(IPAddress.Parse("127.0.0.1"), 13000);
+            NetworkStream ns = tcpClient.GetStream();
+            char b = 'a';
+            byte[] bytes = new byte[1024];
+            int recv;
+            string mess;
+            while (true)
+            {
+                mess = b.ToString();
+                if (b > 3 + 'a')
+                    mess = "bye";
+                bytes = System.Text.Encoding.ASCII.GetBytes(mess);
+                try
+                {
+                    ns.Write(bytes, 0, bytes.Length);
+                }
+                catch
+                {
+                    Console.WriteLine("missing");
+                    break;
+                }
+                bytes = new byte[1024];
+                try
+                {
+                    if ((recv = ns.Read(bytes, 0, 1024)) == 0)
+                    {
+                        Console.WriteLine("disconnected");
+                        break;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("missing");
+                    break;
+                }
+                mess = System.Text.Encoding.ASCII.GetString(bytes, 0, recv);
+                Console.WriteLine(mess);
+                Thread.Sleep(1000);
+                if (b > 3 + 'a')
+                    break;
+                ++b;
+            }
+            ns.Close();
+            tcpClient.Close();
+        }
+    }
+}

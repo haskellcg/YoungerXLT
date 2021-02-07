@@ -1,0 +1,16 @@
+﻿<Window x:Class="LoginPage.ChangeInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="修改个人信息" Height="380" Width="480">
+    <Grid>
+        <Image Height="341" Source="image/UserInfoUpdate.tif" HorizontalAlignment="Left" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="458" />
+        <TextBox FontSize="20" Height="34" HorizontalAlignment="Left" Margin="256,72,0,0" Name="UserName" VerticalAlignment="Top" Width="167" />
+        <Button Content="OK" FontSize="18" Height="37" HorizontalAlignment="Right" Margin="0,298,12,0" Name="button1" VerticalAlignment="Top" Width="70" Click="button1_Click" />
+        <Button Content="Reset" FontSize="18" Height="37" HorizontalAlignment="Left" Margin="300,298,0,0" Name="button2" VerticalAlignment="Top" Width="70" Click="button2_Click" />
+        <PasswordBox FontSize="20" Height="34" HorizontalAlignment="Left" Margin="256,155,0,0" Name="Password" VerticalAlignment="Top" Width="167" />
+        <PasswordBox FontSize="20" Height="34" HorizontalAlignment="Left" Margin="256,196,0,0" Name="NewPassword" VerticalAlignment="Top" Width="167" />
+        <RadioButton Content="Male" Height="33" FontSize="20" HorizontalAlignment="Left" Margin="256,116,0,0"  Name="Gender1" VerticalAlignment="Top" IsChecked="True" />
+        <RadioButton Content="Female" FontFamily="Microsoft YaHei" Height="33" FontSize="20" HorizontalAlignment="Right" Margin="0,116,35,0" Name="Gender2" VerticalAlignment="Top" />
+        <PasswordBox FontSize="20" Height="34" HorizontalAlignment="Left" Margin="256,236,0,0" Name="ConfirmPassword" VerticalAlignment="Top" Width="167" />
+    </Grid>
+</Window>

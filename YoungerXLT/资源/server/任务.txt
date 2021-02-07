@@ -1,0 +1,30 @@
+1、完成上传功能（例如图片上传）
+		文件命名:
+				UserID+Random+.Ext(11+3=14)
+		显示:
+				PictureBox---Image.From... 
+		上传:
+				WebClient---DownLoad.../Upload....
+				
+				
+				string strUrl = "http://images.jsc.nasa.gov/images/pao/AS11/10075267.jpg";
+				WebRequest   webreq = WebRequest.Create(strUrl);
+				WebResponse  webres = webreq.GetResponse();
+				Stream       stream = webres.GetResponseStream();
+				image = Image.FromStream(stream);
+				stream.Close();
+				g.DrawImage(image, 0, 0);
+				
+				
+				
+		注意:
+			上面叙述基本都是其中的一端的;
+			这里不明白在上传以及请求图片时需要服务器端开启什么服务；
+			如果采用TCP方式需要自己定制协议，每个数据包的大小以及结束以及开始;
+			如果把图片存放在本地，那么其他网上用户浏览时就看不到用户的图片;
+2、完成文件操作功能
+		###############################
+3、完成WPF的学习
+
+4、Ftp上传文件
+

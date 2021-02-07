@@ -1,0 +1,128 @@
+TcpListener 多用户连接，多线程  2012-01-08 21:05:38|  分类： 默认分类 |  标签： |字号大中小 订阅 .
+
+类似qq程序基于Tcp/ip的聊天程序
+包含三个部分
+MyChatServer
+myChatClient
+TestConnect
+一、先说MyChatServer
+在这部分主要注意如何建立一个基于多线程的Tcp/ip server
+步骤如下
+1.建立侦听程序
+/// 开始建立侦听类，并且启动一个线程专门处理是否有连接请求
+/// </summary>
+/// <param name="sender"></param>
+/// <param name="e"></param>
+private void button_Server_Click(object sender, EventArgs e)
+{
+//建立开始侦听
+tListener = new TcpListener(IPAddress.Parse("127.0.0.1"), int.Parse(textBox_Port.Text));
+tListener.Start();
+listBox_Info.Items.Add("开始侦听，等待客户端连入");
+listBox_Info.Items.Add("本地节点为:" + tListener.LocalEndpoint);
+//启动一个新的线程，执行连接 
+AcceptConnectedThread = new Thread(new ThreadStart(AcceptConnect));
+AcceptConnectedThread.IsBackground = true; //定义成后台线程，主线程死了，后台线程都会死掉。
+AcceptConnectedThread.Start();
+}
+本部分先启动侦听，然后建立一个线程程序，不停的看tListener是否有连接请求
+2.有连接请求的时候，建立一个新的线程，处理连接后的聊天过程
+/// <summary>
+/// 本线程处理listener的连接事件，当侦听到有连接的时候
+/// 再开一个线程，处理连接完成后的chart事情
+/// </summary>
+private void AcceptConnect()
+{
+while (true) //一直在循环，查看listener时候有等待需要连接的请求，只有线程abort的时候，终止
+{
+if (tListener.Pending()) //如果有需要连接的请求，则建立连接，并开一个线程处理服务器和这个客户端的通信内容
+{
+//接受建立连接 
+Socket s = tListener.AcceptSocket();
+this.Invoke(new SetListBoxMethod(SetListBoxTalkInof), "客户端连接来自：" + s.RemoteEndPoint);
+//开另外一个线程，单独处理这个聊天
+Thread TalkThread = new Thread(new ParameterizedThreadStart(TalkInfo));
+TalkThread.IsBackground = true;
+TalkThread.Start(s);
+} 
+}
+}
+3.处理聊天内容的发送
+/// <summary>
+/// 处理服务器和客户端的说话内容解析，
+/// 每个客户端都对应一个线程。
+/// </summary>
+/// <param name="p"></param>
+private void TalkInfo(object p)
+{
+Socket s = (Socket)p;
+bool leaveof = false;
+string strUserName = ""; //当前正在聊天的对象名
+while (leaveof == false)
+{ 
+try
+{
+//接收信息
+byte[] b = new byte[2048];
+int k = s.Receive(b);
+System.Text.UTF8Encoding utf8 = new UTF8Encoding(); //可以处理中文
+string speakInfo = utf8.GetString(b, 0, k);
+//listBox_Info.Items.Add("客户端说：" + speakInfo);
+string[] ChartCommand = GetChartCommand(speakInfo);
+if (ChartCommand[0] == "CONNECT")
+{
+strUserName = ChartCommand[1];
+this.Invoke(new SetListUsersMethod(AddUserList), ChartCommand[1]);
+}
+else if (ChartCommand[0] == "EXIT")
+{
+this.Invoke(new RemoveUserListMethod(RemoveUserList), ChartCommand[1]);
+leaveof = true;
+}
+else
+{
+this.Invoke(new SetListBoxMethod(SetListBoxTalkInof), strUserName + "说：" + speakInfo);
+//发送回信
+s.Send(utf8.GetBytes("收到"));
+}
+}
+catch (Exception ex)
+{
+if (ex.Message == "远程主机强迫关闭了一个现有的连接。")
+{
+this.Invoke(new RemoveUserListMethod(RemoveUserList),strUserName);
+leaveof = true;
+}
+}
+}
+//关闭
+s.Close();
+}
+总结：server程序运行的时候，存在以下对象
+1.一个listener
+2.一个线程，看listener时候有连接，有连接就建立一个客户端连接
+3.N个线程，对应N个连上来的客户端
+二、再说Client
+Client相对简单；一句话：建立连接，发送信息
+//建立连接
+private void button_Connect_Click(object sender, EventArgs e)
+{
+tClient = new TcpClient(textBox_Ip.Text, int.Parse(textBox_Port.Text));
+listBox_Info.Items.Add("已连接到服务器");
+//Thread.Sleep(10000);
+SendInfo("CONNECT|" + textBox_Name.Text);
+}
+//发送信息
+private void SendInfo(string pInfo)
+{
+NetworkStream ns = tClient.GetStream();
+UTF8Encoding utf = new UTF8Encoding();
+byte[] b=utf.GetBytes(pInfo);
+ns.Write(b, 0, b.Count());
+}
+三、最后说TestConnect
+这个程序是我测试MyChatServer稳健性的。
+程序就是循环建立3000个用户（建立3000个线程），然后随机向服务器发信息。
+测试过后，发现，除非是分配线程的时候内存不足，程序很稳健
+ 
+ 
